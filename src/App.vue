@@ -7,8 +7,23 @@ const postHeader = ref('')
 const postBody = ref('')
 const postAuthor = ref('')
 
+const posts = ref([])
+
+
 function submitForm()
 {
+ const newPost = {
+   title: postHeader.value,
+   body: postBody.value, 
+   author: postAuthor.value
+ }
+
+ posts.value.push(newPost)
+
+
+
+
+
   console.log('Submitted:', {
     title: postHeader.value,
     body: postBody.value,
@@ -36,13 +51,22 @@ function submitForm()
         New Post
       </button>
     </div>
-  </menu>
+  </menu> 
+
+  <div v-if="posts.length > 0" class="posts">
+    <h2>Blog</h2>
+    <div v-for="post in posts" :key="post.id" class="post">
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.body }}</p>
+      <small>{{ post.author}}</small>
+    </div>
+  </div>
 
 
   <form v-if="showForm" @submit.prevent="submitForm">
     <h1>Create Post</h1>
     <p>Post Header: <input type="text" required v-model="postHeader"></p>
-    <p>Post Body: <input type="text" required v-model="postBody"></p>
+    <p>Post Body: <input type="textbox" required v-model="postBody"></p>
     <p>Post Author: <input type="text" required v-model="postAuthor"></p>
     <button type="">Submit</button>
   </form>
@@ -129,6 +153,24 @@ form button {
 
 form button:hover {
   background-color: #218838;
+}
+
+.post {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.posts{
+  margin: 2rem;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  max-width: 500px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 </style>
