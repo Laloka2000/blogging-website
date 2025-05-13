@@ -35,6 +35,11 @@ function submitForm()
   postBody.value = ''
   postAuthor.value = ''
 }
+
+function deletePost(id){
+  posts.value = posts.value.filter(post => post.id !== id);
+}
+
 </script>
 
 <template>
@@ -59,6 +64,7 @@ function submitForm()
       <h3>{{ post.title }}</h3>
       <p>{{ post.body }}</p>
       <small>{{ post.author}}</small>
+      <button @click="deletePost(post.id)">Delete Post</button>
     </div>
   </div>
 
@@ -171,6 +177,21 @@ form button:hover {
   max-width: 500px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.post button{
+  margin-top: 0.5rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.post button:hover{
+  background-color: #c82333;
 }
 
 </style>
