@@ -7,6 +7,7 @@ const postHeader = ref('')
 const postBody = ref('')
 const postAuthor = ref('')
 const posts = ref([])
+const isMenuOpen = ref(false)
 const loadPosts = localStorage.getItem('posts');
 if(loadPosts){
   posts.value = JSON.parse(loadPosts);
@@ -43,20 +44,19 @@ function deletePost(id)
 </script>
 
 <template>
-
-  <menu>
-    <li>
-      <router-link to="/">Home</router-link>
-    </li>
-    <li>
-      <router-link to="/about">About</router-link>
-    </li>
-    <div>
-      <button @click="showForm = true">
-        New Post
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="class">📰 My Blog</div>
+      <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen">
+        ☰
       </button>
+      <ul :class="['nav-links', { open: isMenuOpen }]">
+      <li><router-link to="/">Home</router-link></li>
+      <li><router-link to="/about">About</router-link></li>
+      <li><button @click="showForm = true">New Post</button></li>
+    </ul>
     </div>
-  </menu>
+  </nav>
 
   <h1>Blog Posts</h1>
   <div v-if="posts.length > 0" class="posts">
@@ -79,6 +79,7 @@ function deletePost(id)
 </template>
 
 <style scoped>
+
 form {
   display: flex;
   flex-direction: column;
@@ -86,41 +87,56 @@ form {
   margin: 20px;
 }
 
-menu {
+.navbar {
+  background-color: #333;
+  color: white;
+  padding: 0.75rem 1rem;
+}
+
+.nav-container {
   display: flex;
-  gap: 1rem;
-  background-color: #f5f5f5;
-  padding: 1rem;
-  list-style: none;
+  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ccc;
+  flex-wrap: wrap;
 }
 
-menu li {
-  margin: 0;
-}
-
-menu a {
-  text-decoration: none;
-  color: #333;
+.brand {
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
-menu a:hover {
-  color: #007BFF;
-}
-
-menu button {
-  padding: 0.5rem 1rem;
-  background-color: #007BFF;
-  color: white;
+.menu-toggle {
+  background: none;
   border: none;
-  border-radius: 5px;
+  color: white;
+  font-size: 1.5rem;
   cursor: pointer;
+  display: none;
 }
 
-menu button:hover {
-  background-color: #0056b3;
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+.nav-links li {
+  margin: 0.5rem 0;
+}
+
+.nav-links a,
+.nav-links button {
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.nav-links button:hover,
+.nav-links a:hover {
+  text-decoration: underline;
 }
 
 form {
