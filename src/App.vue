@@ -1,34 +1,32 @@
 <script setup>
+
 import { ref } from 'vue'
 
 const showForm = ref(false)
-
 const postHeader = ref('')
 const postBody = ref('')
 const postAuthor = ref('')
-
 const posts = ref([])
+const loadPosts = localStorage.getItem('posts');
+if(loadPosts){
+  posts.value = JSON.parse(loadPosts);
+} 
+
+
 
 
 function submitForm()
 {
- const newPost = {
-   title: postHeader.value,
-   body: postBody.value, 
-   author: postAuthor.value
- }
-
- posts.value.push(newPost)
-
-
-
-
-
-  console.log('Submitted:', {
+  const newPost = {
+    id: Date.now(),
     title: postHeader.value,
     body: postBody.value,
-    author: postAuthor.value,
-  })
+    author: postAuthor.value
+  }
+  posts.value.push(newPost)
+
+  localStorage.setItem('posts', JSON.stringify(posts.value))
+
 
   showForm.value = false
   postHeader.value = ''
@@ -36,8 +34,10 @@ function submitForm()
   postAuthor.value = ''
 }
 
-function deletePost(id){
+function deletePost(id)
+{
   posts.value = posts.value.filter(post => post.id !== id);
+  localStorage.setItem('posts', JSON.stringify(posts.value))
 }
 
 </script>
@@ -56,14 +56,14 @@ function deletePost(id){
         New Post
       </button>
     </div>
-  </menu> 
+  </menu>
 
+  <h1>Blog Posts</h1>
   <div v-if="posts.length > 0" class="posts">
-    <h2>Blog</h2>
     <div v-for="post in posts" :key="post.id" class="post">
       <h3>{{ post.title }}</h3>
       <p>{{ post.body }}</p>
-      <small>{{ post.author}}</small>
+      <small>{{ post.author }}</small>
       <button @click="deletePost(post.id)">Delete Post</button>
     </div>
   </div>
@@ -72,7 +72,7 @@ function deletePost(id){
   <form v-if="showForm" @submit.prevent="submitForm">
     <h1>Create Post</h1>
     <p>Post Header: <input type="text" required v-model="postHeader"></p>
-    <p>Post Body: <input type="textbox" required v-model="postBody"></p>
+    <p>Post Body: <input type="textarea" rows="4" cols="50" required v-model="postBody"></p>
     <p>Post Author: <input type="text" required v-model="postAuthor"></p>
     <button type="">Submit</button>
   </form>
@@ -93,20 +93,20 @@ menu {
   padding: 1rem;
   list-style: none;
   align-items: center;
-  border-bottom: 1px solid #ccc;  
+  border-bottom: 1px solid #ccc;
 }
 
 menu li {
   margin: 0;
 }
 
-menu a{
+menu a {
   text-decoration: none;
   color: #333;
   font-weight: bold;
 }
 
-menu a:hover{
+menu a:hover {
   color: #007BFF;
 }
 
@@ -123,14 +123,14 @@ menu button:hover {
   background-color: #0056b3;
 }
 
-form{
+form {
   margin: 2rem;
   padding: 2rem;
   border: 1px solid #ddd;
   border-radius: 10px;
   max-width: 500px;
   background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 form h1 {
@@ -169,7 +169,7 @@ form button:hover {
   background-color: #f9f9f9;
 }
 
-.posts{
+.posts {
   margin: 2rem;
   padding: 2rem;
   border: 1px solid #ddd;
@@ -180,7 +180,7 @@ form button:hover {
 }
 
 
-.post button{
+.post button {
   margin-top: 0.5rem;
   background-color: #dc3545;
   color: white;
@@ -190,8 +190,7 @@ form button:hover {
   cursor: pointer;
 }
 
-.post button:hover{
+.post button:hover {
   background-color: #c82333;
 }
-
 </style>
